@@ -1,4 +1,5 @@
 <template>
+  <!-- Alert Message -->
   <div
     v-if="registration.displayAlert"
     class="text-white text-center font-bold p-4 mb-4 rounded"
@@ -6,6 +7,7 @@
   >
     {{ registration.alertMessage }}
   </div>
+  <!-- Vee Form -->
   <vee-form
     :validation-schema="validationSchema"
     :initial-values="initialValues"
@@ -138,10 +140,11 @@ export default {
       this.registration.alertMessage =
         "Please wait! Your account is being created";
       setTimeout(() => {
-        this.registration.inProgress = true;
+        this.registration.inProgress = false;
         this.registration.cssClass = "bg-green-500";
         this.registration.alertMessage =
           "Success! Your account has been created.";
+        console.log(values);
       }, 3000);
     },
   },
