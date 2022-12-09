@@ -108,6 +108,7 @@
 </template>
 
 <script>
+import { auth, usersCollection } from "@/includes/firebase";
 export default {
   name: "appRegistrationForm",
   data() {
@@ -133,19 +134,38 @@ export default {
     };
   },
   methods: {
-    register(values) {
+    async register(values) {
       this.registration.displayAlert = true;
       this.registration.inProgress = true;
       this.registration.cssClass = "bg-blue-500";
       this.registration.alertMessage =
         "Please wait! Your account is being created";
-      setTimeout(() => {
+
+      let userCred = null;
+      try {
+        userCred = await auth.createUserWithEmailAndPassword(
+          values.email,
+          values.password
+        );
+        await usersCollection.add({
+          name: values.name,
+          email: values.email,
+          age: values.age,
+          country: values.country,
+        });
+      } catch (error) {
         this.registration.inProgress = false;
+        this.registration.cssClass = "bg-red-500";
+        this.registration.alertMessage =
+          "An unexpected error occured. Please try again later.";
+        return;
+      }
+
+      this.userLoggedIn = true;
         this.registration.cssClass = "bg-green-500";
         this.registration.alertMessage =
           "Success! Your account has been created.";
-        console.log(values);
-      }, 3000);
+      console.log(userCred);
     },
   },
 };
