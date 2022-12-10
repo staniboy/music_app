@@ -4,21 +4,42 @@
       <a
         class="block rounded py-3 px-4 transition"
         :class="{
-          'text-white bg-blue-600 hover:text-white': modelValue === tab,
-          'hover:text-blue-600': modelValue !== tab,
+          'text-white bg-blue-600 hover:text-white': selectedTab === tab,
+          'hover:text-blue-600': selectedTab !== tab,
         }"
         href="#"
-        @click.prevent="$emit('update:modelValue', tab)"
+        @click="selectTab(tab)"
         >{{ tab }}</a
       >
     </li>
   </ul>
+  <slot></slot>
 </template>
 
 <script>
+import { computed } from "vue";
+
 export default {
   name: "AppTabs",
-  props: ["modelValue", "tabs"],
-  emits: ["update:modelValue"],
+  data() {
+    return {
+      selectedTab: "",
+      tabs: [],
+    };
+  },
+  methods: {
+    selectTab(name) {
+      this.selectedTab = name;
+    },
+  },
+  provide() {
+    return {
+      selectedTabProvider: computed(() => this.selectedTab),
+      tabsProvider: this.tabs,
+    };
+  },
+  mounted() {
+    this.selectedTab = this.tabs[0];
+  },
 };
 </script>

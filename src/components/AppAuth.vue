@@ -34,10 +34,10 @@
             </div>
           </div>
           <!-- Tabs -->
-          <app-tabs v-model="tab" :tabs="tabs" />
-          <!-- Forms -->
-          <app-login-form v-if="tab === 'Login'" />
-          <app-registration-form v-if="tab === 'Register'" />
+          <app-tabs v-slot="{ ref }">
+            <app-tab :title="'Login'"> <app-login-form /></app-tab>
+            <app-tab :title="'Registration'"><app-registration-form /></app-tab>
+          </app-tabs>
         </div>
       </div>
     </div>
@@ -50,15 +50,10 @@ import useModalStore from "@/stores/modal";
 import AppLoginForm from "@/components/AppLoginForm.vue";
 import AppRegistrationForm from "@/components/AppRegistrationForm.vue";
 import AppTabs from "@/components/AppTabs.vue";
+import AppTab from "@/components/AppTab.vue";
 export default {
   name: "AppAuth",
-  components: { AppLoginForm, AppRegistrationForm, AppTabs },
-  data() {
-    return {
-      tab: "Login",
-      tabs: ["Login", "Register"],
-    };
-  },
+  components: { AppLoginForm, AppRegistrationForm, AppTabs, AppTab },
   computed: {
     ...mapWritableState(useModalStore, {
       modalState: "isOpen",
