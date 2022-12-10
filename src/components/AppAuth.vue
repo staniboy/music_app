@@ -34,8 +34,8 @@
             </div>
           </div>
           <!-- Tabs -->
-          <app-tabs v-slot="{ ref }">
-            <app-tab :title="'Login'"> <app-login-form /></app-tab>
+          <app-tabs>
+            <app-tab :title="'Login'"><app-login-form /></app-tab>
             <app-tab :title="'Registration'"><app-registration-form /></app-tab>
           </app-tabs>
         </div>
