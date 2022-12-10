@@ -20,12 +20,15 @@ export default defineStore("user", {
       await userCred.user.updateProfile({
         displayName: values.name,
       });
-
       this.isLoggedIn = true;
     },
     async authenticate(values) {
       await auth.signInWithEmailAndPassword(values.email, values.password);
       this.isLoggedIn = true;
+    },
+    async signOut() {
+      await auth.signOut();
+      this.isLoggedIn = false;
     },
   },
 });
