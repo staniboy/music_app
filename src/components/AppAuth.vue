@@ -34,10 +34,10 @@
             </div>
           </div>
           <!-- Tabs -->
-          <app-tabs v-model="tab" />
+          <app-tabs v-model="tab" :tabs="tabs" />
           <!-- Forms -->
-          <app-login-form v-if="tab === 'login'" />
-          <app-registration-form v-if="tab === 'register'" />
+          <app-login-form v-if="tab === 'Login'" />
+          <app-registration-form v-if="tab === 'Register'" />
         </div>
       </div>
     </div>
@@ -55,7 +55,8 @@ export default {
   components: { AppLoginForm, AppRegistrationForm, AppTabs },
   data() {
     return {
-      tab: "login",
+      tab: "Login",
+      tabs: ["Login", "Register"],
     };
   },
   computed: {
