@@ -78,6 +78,7 @@ export default {
       this.alert.inProgress = false;
       this.alert.cssClass = "bg-green-500";
       this.alert.alertMessage = "Success! Your are logged in.";
+      window.location.reload();
     },
   },
 };

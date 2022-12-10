@@ -158,6 +158,7 @@ export default {
       this.registration.cssClass = "bg-green-500";
       this.registration.alertMessage =
         "Success! Your account has been created.";
+      window.location.reload();
     },
   },
 };
