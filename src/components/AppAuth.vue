@@ -34,32 +34,7 @@
             </div>
           </div>
           <!-- Tabs -->
-          <ul class="flex flex-wrap mb-4">
-            <li class="flex-auto text-center">
-              <a
-                class="block rounded py-3 px-4 transition"
-                :class="{
-                  'text-white bg-blue-600 hover:text-white': tab === 'login',
-                  'hover:text-blue-600': tab !== 'login',
-                }"
-                href="#"
-                @click.prevent="tab = 'login'"
-                >Login</a
-              >
-            </li>
-            <li class="flex-auto text-center">
-              <a
-                class="block rounded py-3 px-4 transition"
-                :class="{
-                  'text-white bg-blue-600 hover:text-white': tab === 'register',
-                  'hover:text-blue-600': tab !== 'register',
-                }"
-                href="#"
-                @click.prevent="tab = 'register'"
-                >Register</a
-              >
-            </li>
-          </ul>
+          <app-tabs v-model="tab" />
           <!-- Forms -->
           <app-login-form v-if="tab === 'login'" />
           <app-registration-form v-if="tab === 'register'" />
@@ -74,9 +49,10 @@ import { mapWritableState } from "pinia";
 import useModalStore from "@/stores/modal";
 import AppLoginForm from "@/components/AppLoginForm.vue";
 import AppRegistrationForm from "@/components/AppRegistrationForm.vue";
+import AppTabs from "@/components/AppTabs.vue";
 export default {
   name: "AppAuth",
-  components: { AppLoginForm, AppRegistrationForm },
+  components: { AppLoginForm, AppRegistrationForm, AppTabs },
   data() {
     return {
       tab: "login",
