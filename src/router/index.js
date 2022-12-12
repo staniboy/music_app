@@ -21,7 +21,7 @@ const routes = [
     component: ManageView,
   },
   {
-    path: "manage",
+    path: "/manage",
     redirect: { name: "manage" },
   },
   {
