@@ -19,6 +19,10 @@ const routes = [
     path: "/manage",
     component: ManageView,
   },
+  {
+    path: "/:catchAll(.*)*",
+    redirect: { name: "home" },
+  },
 ];
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
