@@ -2,7 +2,7 @@
   <section class="container mx-auto mt-6">
     <div class="md:grid md:grid-cols-3 md:gap-4">
       <div class="col-span-1">
-        <app-upload />
+        <app-upload :addSong="addSong" />
       </div>
       <div class="col-span-2">
         <div
@@ -22,6 +22,7 @@
               :index="i"
               :song="song"
               :updateSong="updateSong"
+              :removeSong="removeSong"
             />
           </div>
         </div>
@@ -36,12 +37,6 @@ import { songsCollection, auth } from "@/includes/firebase";
 export default {
   name: "ManageView",
   components: { AppUpload, CompositionItem },
-  methods: {
-    updateSong(i, values) {
-      this.songs[i].modified_name = values.modified_name;
-      this.songs[i].genre = values.genre;
-    },
-  },
   data() {
     return {
       songs: [],
@@ -51,13 +46,23 @@ export default {
     const snapshot = await songsCollection
       .where("uid", "==", auth.currentUser.uid)
       .get();
-    snapshot.forEach((document) => {
+    snapshot.forEach(this.addSong);
+  },
+  methods: {
+    updateSong(i, values) {
+      this.songs[i].modified_name = values.modified_name;
+      this.songs[i].genre = values.genre;
+    },
+    addSong(document) {
       const song = {
         id: document.id,
         ...document.data(),
       };
       this.songs.push(song);
-    });
+    },
+    removeSong(i) {
+      this.songs.splice(i, 1);
+    },
   },
 };
 </script>

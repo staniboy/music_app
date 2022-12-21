@@ -3,6 +3,7 @@
     <div v-show="!showForm">
       <h4 class="inline-block text-2xl font-bold">{{ song.modified_name }}</h4>
       <button
+        @click.prevent="deleteSong"
         class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
       >
         <i class="fa fa-times"></i>
@@ -57,7 +58,7 @@
         </button>
         <button
           :disabled="alert.inProgress"
-          @click="showForm = false"
+          @click.prevent="showForm = false"
           type="button"
           class="py-1.5 px-3 rounded text-white bg-gray-600"
         >
@@ -69,7 +70,7 @@
 </template>
 
 <script>
-import { songsCollection } from "@/includes/firebase";
+import { songsCollection, storage } from "@/includes/firebase";
 export default {
   name: "CompositionItem",
   props: {
@@ -82,6 +83,10 @@ export default {
       required: true,
     },
     updateSong: {
+      type: Function,
+      required: true,
+    },
+    removeSong: {
       type: Function,
       required: true,
     },
@@ -107,6 +112,14 @@ export default {
       this.alert.inProgress = false;
       this.alert.cssClass = "bg-green-500";
       this.alert.alertMessage = "Success!";
+    },
+    async deleteSong() {
+      const storageRef = storage.ref();
+      const songRef = storageRef.child(`songs/${this.song.original_name}`);
+
+      await songRef.delete();
+      await songsCollection.doc(this.song.id).delete();
+      this.removeSong(this.index);
     },
   },
   data() {
