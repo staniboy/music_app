@@ -23,6 +23,7 @@
               :song="song"
               :updateSong="updateSong"
               :removeSong="removeSong"
+              :updateUnsavedFlag="updateUnsavedFlag"
             />
           </div>
         </div>
@@ -40,6 +41,7 @@ export default {
   data() {
     return {
       songs: [],
+      unsavedFlag: false,
     };
   },
   async created() {
@@ -63,6 +65,19 @@ export default {
     removeSong(i) {
       this.songs.splice(i, 1);
     },
+    updateUnsavedFlag(value) {
+      this.unsavedFlag = value;
+    },
+  },
+  beforeRouteLeave(to, from, next) {
+    if (!this.unsavedFlag) {
+      next();
+    } else {
+      const promt = confirm(
+        "You have unsaved changes. Are you sure you want to leave?"
+      );
+      next(promt);
+    }
   },
 };
 </script>
