@@ -48,6 +48,8 @@ export default {
   data() {
     return {
       songs: [],
+      maxPerPage: 15,
+      working: false,
     };
   },
   async created() {
@@ -59,20 +61,38 @@ export default {
   },
   methods: {
     async getSongs() {
-      const snapshots = await songsCollection.get();
+      if (this.working) return;
+      this.working = true;
+      let snapshots;
+      if (this.songs.length) {
+        const lastDoc = await songsCollection
+          .doc(this.songs[this.songs.length - 1].id)
+          .get();
+        snapshots = await songsCollection
+          .orderBy("modified_name")
+          .startAfter(lastDoc)
+          .limit(this.maxPerPage)
+          .get();
+      } else {
+        snapshots = await songsCollection
+          .orderBy("modified_name")
+          .limit(this.maxPerPage)
+          .get();
+      }
       snapshots.forEach((snapshot) => {
         this.songs.push({
           id: snapshot.id,
           ...snapshot.data(),
         });
       });
+      this.working = false;
     },
     handleScroll() {
       const { scrollTop, offsetHeight } = document.documentElement;
       const { innerHeight } = window;
       const bottomOfWindow =
         Math.round(scrollTop) + innerHeight === offsetHeight;
-      if (bottomOfWindow) console.log("who lives at the bottom of sea?");
+      if (bottomOfWindow) this.getSongs();
     },
   },
 };
