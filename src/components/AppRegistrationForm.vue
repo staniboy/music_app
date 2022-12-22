@@ -1,12 +1,10 @@
 <template>
   <!-- Alert Message -->
-  <div
-    v-if="registration.displayAlert"
-    class="text-white text-center font-bold p-4 mb-4 rounded"
-    :class="registration.cssClass"
-  >
-    {{ registration.alertMessage }}
-  </div>
+  <alert-message
+    :show="alert.show"
+    :color="alert.color"
+    :message="alert.message"
+  />
   <!-- Vee Form -->
   <vee-form
     :validation-schema="validationSchema"
@@ -99,7 +97,7 @@
     </div>
     <button
       type="submit"
-      :disabled="registration.inProgress"
+      :disabled="working"
       class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
     >
       Submit
@@ -108,10 +106,12 @@
 </template>
 
 <script>
+import AlertMessage from "./AlertMessage.vue";
 import { mapActions } from "pinia";
 import useUserStore from "@/stores/user";
 export default {
   name: "appRegistrationForm",
+  components: { AlertMessage },
   data() {
     return {
       validationSchema: {
@@ -126,12 +126,12 @@ export default {
       initialValues: {
         country: "USA",
       },
-      registration: {
-        inProgress: false,
-        displayAlert: false,
-        cssClass: "bg-blue-500",
-        alertMessage: "Please wait! Your account is being created",
+      alert: {
+        show: false,
+        color: "bg-blue-500",
+        message: "Please wait! Your account is being created",
       },
+      working: false,
     };
   },
   methods: {
@@ -139,25 +139,22 @@ export default {
       createUser: "register",
     }),
     async register(values) {
-      this.registration.displayAlert = true;
-      this.registration.inProgress = true;
-      this.registration.cssClass = "bg-blue-500";
-      this.registration.alertMessage =
-        "Please wait! Your account is being created";
+      this.working = true;
+      this.alert.show = true;
+      this.alert.color = "bg-blue-500";
+      this.alert.message = "Please wait! Your account is being created";
       try {
         await this.createUser(values);
       } catch (error) {
-        this.registration.inProgress = false;
-        this.registration.cssClass = "bg-red-500";
-        this.registration.alertMessage =
+        this.working = false;
+        this.alert.color = "bg-red-500";
+        this.alert.message =
           "An unexpected error occured. Please try again later.";
         return;
       }
-
       this.userLoggedIn = true;
-      this.registration.cssClass = "bg-green-500";
-      this.registration.alertMessage =
-        "Success! Your account has been created.";
+      this.alert.color = "bg-green-500";
+      this.alert.message = "Success! Your account has been created.";
       window.location.reload();
     },
   },

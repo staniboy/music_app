@@ -16,14 +16,11 @@
       </button>
     </div>
     <div v-show="showForm">
-      <!-- Alert Message -->
-      <div
-        v-if="alert.displayAlert"
-        class="text-white text-center font-bold p-4 mb-4 rounded"
-        :class="alert.cssClass"
-      >
-        {{ alert.alertMessage }}
-      </div>
+      <alert-message
+        :show="alert.show"
+        :color="alert.color"
+        :message="alert.message"
+      />
       <vee-form
         :validation-schema="validationSchema"
         :initial-values="song"
@@ -52,15 +49,20 @@
           <vee-error class="text-red-600" name="genre" />
         </div>
         <button
-          :disabled="alert.inProgress"
+          :disabled="working"
           type="submit"
           class="py-1.5 px-3 rounded text-white bg-green-600"
         >
           Submit
         </button>
         <button
-          :disabled="alert.inProgress"
-          @click.prevent="showForm = false"
+          :disabled="working"
+          @click.prevent="
+            () => {
+              showForm = false;
+              alert.show = false;
+            }
+          "
           type="button"
           class="py-1.5 px-3 rounded text-white bg-gray-600"
         >
@@ -72,9 +74,11 @@
 </template>
 
 <script>
+import AlertMessage from "@/components/AlertMessage.vue";
 import { songsCollection, storage } from "@/includes/firebase";
 export default {
   name: "CompositionItem",
+  components: { AlertMessage },
   props: {
     index: {
       type: Number,
@@ -96,28 +100,43 @@ export default {
       type: Function,
     },
   },
+  data() {
+    return {
+      showForm: false,
+      validationSchema: {
+        modified_name: "required|max:100",
+        genre: "alpha_spaces|max:100",
+      },
+      alert: {
+        show: false,
+        color: "bg-blue-500",
+        message: "Please wait! Updating song info.",
+      },
+      working: false,
+    };
+  },
   methods: {
     async edit(values) {
-      this.alert.displayAlert = true;
-      this.alert.inProgress = true;
-      this.alert.cssClass = "bg-blue-500";
-      this.alert.alertMessage = "Please wait! Updating song info.";
+      this.working = true;
+      this.alert.show = true;
+      this.alert.color = "bg-blue-500";
+      this.alert.message = "Please wait! Updating song info.";
 
       try {
         await songsCollection.doc(this.song.id).update(values);
       } catch (error) {
-        this.alert.inProgress = false;
-        this.alert.cssClass = "bg-red-500";
-        this.alert.alertMessage = "Something went wrong! Try again later.";
+        this.working = false;
+        this.alert.color = "bg-red-500";
+        this.alert.message = "Something went wrong! Try again later.";
         return;
       }
 
       this.updateSong(this.index, values);
       this.updateUnsavedFlag(false);
 
-      this.alert.inProgress = false;
-      this.alert.cssClass = "bg-green-500";
-      this.alert.alertMessage = "Success!";
+      this.working = false;
+      this.alert.color = "bg-green-500";
+      this.alert.message = "Success!";
     },
     async deleteSong() {
       const storageRef = storage.ref();
@@ -127,21 +146,6 @@ export default {
       await songsCollection.doc(this.song.id).delete();
       this.removeSong(this.index);
     },
-  },
-  data() {
-    return {
-      showForm: false,
-      validationSchema: {
-        modified_name: "required|max:100",
-        genre: "alpha_spaces|max:100",
-      },
-      alert: {
-        inProgress: false,
-        displayAlert: false,
-        cssClass: "bg-blue-500",
-        alertMessage: "Please wait! Updating song info.",
-      },
-    };
   },
 };
 </script>
