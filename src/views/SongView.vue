@@ -21,7 +21,7 @@
     </div>
   </section>
   <!-- Form -->
-  <section class="container mx-auto mt-6">
+  <section class="container mx-auto my-4">
     <div class="bg-white rounded border border-gray-200 relative flex flex-col">
       <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
         <!-- Comment Count -->
@@ -66,11 +66,11 @@
     </div>
   </section>
   <!-- Comments -->
-  <ul class="container mx-auto">
+  <ul class="container mx-auto flex flex-col gap-4">
     <li
       v-for="comment in sortedComments"
       :key="comment.id"
-      class="p-6 bg-gray-50 border border-gray-200"
+      class="p-6 bg-gray-50 border rounded border-gray-200"
     >
       <!-- Comment Author -->
       <div class="mb-5">
