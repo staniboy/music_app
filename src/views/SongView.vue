@@ -25,24 +25,38 @@
     <div class="bg-white rounded border border-gray-200 relative flex flex-col">
       <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
         <!-- Comment Count -->
-        <span class="card-title">Comments (15)</span>
+        <span class="card-title">Comments ({{ song.comment_count }})</span>
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
       <div class="p-6">
-        <form>
-          <textarea
+        <alert-message
+          :show="alert.show"
+          :color="alert.color"
+          :message="alert.message"
+        />
+        <vee-form
+          v-if="isLoggedIn"
+          @submit="addComment"
+          :validation-schema="validation_schema"
+        >
+          <vee-field
+            as="textarea"
+            name="comment"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded mb-4"
             placeholder="Your comment here..."
-          ></textarea>
+          ></vee-field>
+          <vee-error class="text-red-600" name="comment" />
           <button
+            :disabled="working"
             type="submit"
             class="py-1.5 px-3 rounded text-white bg-green-600 block"
           >
             Submit
           </button>
-        </form>
+        </vee-form>
         <!-- Sort Comments -->
         <select
+          v-model="sort"
           class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
         >
           <option value="1">Latest</option>
@@ -53,88 +67,46 @@
   </section>
   <!-- Comments -->
   <ul class="container mx-auto">
-    <li class="p-6 bg-gray-50 border border-gray-200">
+    <li
+      v-for="comment in sortedComments"
+      :key="comment.id"
+      class="p-6 bg-gray-50 border border-gray-200"
+    >
       <!-- Comment Author -->
       <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
+        <div class="font-bold">{{ comment.name }}</div>
+        <time>{{ comment.datePosted }}</time>
       </div>
 
       <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium der doloremque laudantium.
-      </p>
-    </li>
-    <li class="p-6 bg-gray-50 border border-gray-200">
-      <!-- Comment Author -->
-      <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
-      </div>
-
-      <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium der doloremque laudantium.
-      </p>
-    </li>
-    <li class="p-6 bg-gray-50 border border-gray-200">
-      <!-- Comment Author -->
-      <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
-      </div>
-
-      <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium der doloremque laudantium.
-      </p>
-    </li>
-    <li class="p-6 bg-gray-50 border border-gray-200">
-      <!-- Comment Author -->
-      <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
-      </div>
-
-      <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium der doloremque laudantium.
-      </p>
-    </li>
-    <li class="p-6 bg-gray-50 border border-gray-200">
-      <!-- Comment Author -->
-      <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
-      </div>
-
-      <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium der doloremque laudantium.
-      </p>
-    </li>
-    <li class="p-6 bg-gray-50 border border-gray-200">
-      <!-- Comment Author -->
-      <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
-      </div>
-
-      <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium der doloremque laudantium.
+        {{ comment.content }}
       </p>
     </li>
   </ul>
 </template>
 
 <script>
-import { songsCollection } from "@/includes/firebase";
+import { songsCollection, commentsCollection, auth } from "@/includes/firebase";
+import { mapState } from "pinia";
+import useUserStore from "@/stores/user";
+import AlertMessage from "@/components/AlertMessage.vue";
 export default {
   name: "SongView",
+  components: { AlertMessage },
   data() {
     return {
       song: {},
+      comments: [],
+      sort: "1",
+      validation_schema: {
+        comment: "required|min:3|max:1000",
+      },
+      alert: {
+        show: false,
+        color: "bg-blue-500",
+        message: "Please wait. Your comment is being submitted.",
+      },
+      working: false,
     };
   },
   async created() {
@@ -144,6 +116,59 @@ export default {
       return;
     }
     this.song = snapshot.data();
+    this.getComments();
+  },
+  computed: {
+    ...mapState(useUserStore, ["isLoggedIn"]),
+    sortedComments() {
+      return [...this.comments].sort((a, b) => {
+        if (this.sort === "1") {
+          return new Date(b.datePosted) - new Date(a.datePosted);
+        }
+        return new Date(a.datePosted) - new Date(b.datePosted);
+      });
+    },
+  },
+  methods: {
+    async addComment(values, { resetForm }) {
+      this.working = true;
+      this.alert = {
+        show: true,
+        color: "bg-blue-500",
+        message: "Please wait. Your comment is being submitted.",
+      };
+      const comment = {
+        content: values.comment,
+        datePosted: new Date().toString(),
+        sid: this.song.id,
+        name: auth.currentUser.displayName,
+        uid: auth.currentUser.uid,
+      };
+
+      await commentsCollection.add(comment); //TODO: handle errors
+      this.getComments();
+      this.working = false;
+      this.alert = {
+        show: true,
+        color: "bg-green-500",
+        message: "Comment posted!",
+      };
+
+      resetForm();
+    },
+    async getComments() {
+      const snapshots = await commentsCollection
+        .where("sid", "==", this.song.id)
+        .get();
+      this.comments = [];
+
+      snapshots.forEach((doc) => {
+        this.comments.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+    },
   },
 };
 </script>
