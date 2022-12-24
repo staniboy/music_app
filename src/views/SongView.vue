@@ -117,6 +117,9 @@ export default {
       this.$router.push({ name: "home" });
       return;
     }
+
+    const { s } = this.$route.query;
+    this.sort = s === "1" || s === "2" ? s : "1";
     this.song = snapshot.data();
     this.getComments();
   },
@@ -148,6 +151,11 @@ export default {
       };
 
       await commentsCollection.add(comment); //TODO: handle errors
+      this.song.comment_count += 1;
+      await songsCollection
+        .doc(this.song.id)
+        .update({ comment_count: this.song.comment_count });
+
       this.getComments();
       this.working = false;
       this.alert = {
@@ -169,6 +177,16 @@ export default {
           id: doc.id,
           ...doc.data(),
         });
+      });
+    },
+  },
+  watch: {
+    sort(newVal) {
+      if (newVal === this.$route.query.s) return;
+      this.$router.push({
+        query: {
+          s: newVal,
+        },
       });
     },
   },
