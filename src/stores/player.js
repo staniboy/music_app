@@ -19,9 +19,9 @@ export default defineStore("player", {
         src: [song.url],
         html5: true,
       });
-      this.sound.play();
       this.sound.on("play", () => requestAnimationFrame(this.progress));
       this.sound.on("seek", () => requestAnimationFrame(this.progress));
+      this.sound.play();
     },
     async toggleAudio() {
       if (!this.sound.playing) return;
