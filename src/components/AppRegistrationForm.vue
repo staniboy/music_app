@@ -96,7 +96,11 @@
         value="1"
         class="w-4 h-4 float-left -ml-6 mt-1 rounded"
       />
-      <i18n-t tag="label" keypath="register-form.accept" class="inline-block"
+      <i18n-t
+        scope="global"
+        tag="label"
+        keypath="register-form.accept"
+        class="inline-block"
         ><a href="#">{{ $t("register-form.tos") }}</a>
       </i18n-t>
       <vee-error class="text-red-600 block" name="tos" />
