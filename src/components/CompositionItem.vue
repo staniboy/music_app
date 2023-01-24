@@ -27,7 +27,9 @@
         @submit="edit"
       >
         <div class="mb-3">
-          <label class="inline-block mb-2">Song Title</label>
+          <label class="inline-block mb-2">
+            {{ $t("composition.title") }}
+          </label>
           <vee-field
             @input="updateUnsavedFlag(true)"
             name="modified_name"
@@ -38,7 +40,9 @@
           <vee-error class="text-red-600" name="modified_name" />
         </div>
         <div class="mb-3">
-          <label class="inline-block mb-2">Genre</label>
+          <label class="inline-block mb-2">
+            {{ $t("composition.genre") }}
+          </label>
           <vee-field
             @input="updateUnsavedFlag(true)"
             name="genre"
@@ -53,7 +57,7 @@
           type="submit"
           class="py-1.5 px-3 mr-1 rounded text-white bg-green-600"
         >
-          Submit
+          {{ $t("composition.submit") }}
         </button>
         <button
           :disabled="working"
@@ -66,7 +70,7 @@
           type="button"
           class="py-1.5 px-3 rounded text-white bg-gray-600"
         >
-          Go Back
+          {{ $t("composition.back") }}
         </button>
       </vee-form>
     </div>

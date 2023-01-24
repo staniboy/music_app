@@ -1,4 +1,11 @@
 {
+  "header": {
+    "title": "Music",
+    "about": "About",
+    "register": "Login / Register",
+    "manage": "Manage",
+    "logout": "Logout"
+  },
   "home": {
     "listen": "Listen to Great Music!",
     "songs": "Songs"
@@ -6,8 +13,39 @@
   "song": {
     "comment_count": "No comments | 1 comment | {count} comments"
   },
-  "register": {
+  "about": {
+    "about": "This is about page"
+  },
+  "manage": {
+    "my-songs": "My Songs"
+  },
+  "auth": {
+    "your-account": "Your Account"
+  },
+  "login-form": {
+    "email": "Email",
+    "password": "Password",
+    "login": "Login"
+  },
+  "register-form": {
+    "name": "Name",
+    "email": "Email",
+    "age": "Age",
+    "password": "Password",
+    "confirm-password": "Confirm Password",
+    "country": "Country",
     "accept": "I accept App's {0}",
-    "tos": "Terms of Service"
+    "tos": "Terms of Service",
+    "register": "Register"
+  },
+  "upload": {
+    "upload": "Upload",
+    "description": "Drop your files here"
+  },
+  "composition": {
+    "title": "Song Title",
+    "genre": "Genre",
+    "submit": "Submit",
+    "back": "Go Back"
   }
 }

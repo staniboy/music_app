@@ -13,7 +13,7 @@
   >
     <!-- Name -->
     <div class="mb-3">
-      <label class="inline-block mb-2">Name</label>
+      <label class="inline-block mb-2">{{ $t("register-form.name") }}</label>
       <vee-field
         name="name"
         type="text"
@@ -24,7 +24,7 @@
     </div>
     <!-- Email -->
     <div class="mb-3">
-      <label class="inline-block mb-2">Email</label>
+      <label class="inline-block mb-2">{{ $t("register-form.email") }}</label>
       <vee-field
         name="email"
         type="email"
@@ -35,7 +35,7 @@
     </div>
     <!-- Age -->
     <div class="mb-3">
-      <label class="inline-block mb-2">Age</label>
+      <label class="inline-block mb-2">{{ $t("register-form.age") }}</label>
       <vee-field
         name="age"
         type="number"
@@ -45,7 +45,9 @@
     </div>
     <!-- Password -->
     <div class="mb-3">
-      <label class="inline-block mb-2">Password</label>
+      <label class="inline-block mb-2">{{
+        $t("register-form.password")
+      }}</label>
       <vee-field name="password" :bails="false" v-slot="{ field, errors }">
         <input
           type="password"
@@ -60,7 +62,9 @@
     </div>
     <!-- Confirm Password -->
     <div class="mb-3">
-      <label class="inline-block mb-2">Confirm Password</label>
+      <label class="inline-block mb-2">{{
+        $t("register-form.confirm-password")
+      }}</label>
       <vee-field
         name="confirm_password"
         type="password"
@@ -71,7 +75,7 @@
     </div>
     <!-- Country -->
     <div class="mb-3">
-      <label class="inline-block mb-2">Country</label>
+      <label class="inline-block mb-2">{{ $t("register-form.country") }}</label>
       <vee-field
         as="select"
         name="country"
@@ -92,8 +96,8 @@
         value="1"
         class="w-4 h-4 float-left -ml-6 mt-1 rounded"
       />
-      <i18n-t tag="label" keypath="register.accept" class="inline-block"
-        ><a href="#">{{ $t("register.tos") }}</a>
+      <i18n-t tag="label" keypath="register-form.accept" class="inline-block"
+        ><a href="#">{{ $t("register-form.tos") }}</a>
       </i18n-t>
       <vee-error class="text-red-600 block" name="tos" />
     </div>
@@ -102,7 +106,7 @@
       :disabled="working"
       class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
     >
-      Submit
+      {{ $t("register-form.register") }}
     </button>
   </vee-form>
 </template>
