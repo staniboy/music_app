@@ -44,7 +44,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.$slots.default());
     this.selectedTabId = this.tabs[0].id;
   },
 };
