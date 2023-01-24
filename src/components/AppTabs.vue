@@ -1,15 +1,15 @@
 <template>
   <ul class="flex flex-wrap mb-4">
-    <li v-for="tab in tabs" :key="tab" class="flex-auto text-center">
+    <li v-for="tab in tabs" :key="tab.id" class="flex-auto text-center">
       <a
         class="block rounded py-3 px-4 transition"
         :class="{
-          'text-white bg-blue-600 hover:text-white': selectedTab === tab,
-          'hover:text-blue-600': selectedTab !== tab,
+          'text-white bg-blue-600 hover:text-white': selectedTabId === tab.id,
+          'hover:text-blue-600': selectedTabId !== tab.id,
         }"
         href="#"
-        @click="selectTab(tab)"
-        >{{ tab }}</a
+        @click="selectTab(tab.id)"
+        >{{ tab.title }}</a
       >
     </li>
   </ul>
@@ -23,23 +23,29 @@ export default {
   name: "AppTabs",
   data() {
     return {
-      selectedTab: "",
-      tabs: [],
+      selectedTabId: "",
     };
   },
+  computed: {
+    tabs() {
+      return this.$slots.default().map((tab) => {
+        return { title: tab.props.title, id: tab.props.id };
+      });
+    },
+  },
   methods: {
-    selectTab(name) {
-      this.selectedTab = name;
+    selectTab(id) {
+      this.selectedTabId = id;
     },
   },
   provide() {
     return {
-      selectedTabProvider: computed(() => this.selectedTab),
-      tabsProvider: this.tabs,
+      selectedTabId: computed(() => this.selectedTabId),
     };
   },
   mounted() {
-    this.selectedTab = this.tabs[0];
+    console.log(this.$slots.default());
+    this.selectedTabId = this.tabs[0].id;
   },
 };
 </script>

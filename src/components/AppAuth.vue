@@ -35,8 +35,12 @@
           </div>
           <!-- Tabs -->
           <app-tabs>
-            <app-tab :title="'Login'"><app-login-form /></app-tab>
-            <app-tab :title="'Registration'"><app-registration-form /></app-tab>
+            <app-tab :title="$t('auth.login')" id="login">
+              <app-login-form />
+            </app-tab>
+            <app-tab :title="$t('auth.registration')" id="registration">
+              <app-registration-form />
+            </app-tab>
           </app-tabs>
         </div>
       </div>
