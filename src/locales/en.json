@@ -20,7 +20,9 @@
     "my-songs": "My Songs"
   },
   "auth": {
-    "your-account": "Your Account"
+    "your-account": "Your Account",
+    "login": "Login",
+    "registration": "Registration"
   },
   "login-form": {
     "email": "Email",
@@ -45,7 +47,7 @@
   "composition": {
     "title": "Song Title",
     "genre": "Genre",
-    "submit": "Submit",
+    "submit": "Save",
     "back": "Go Back"
   }
 }
