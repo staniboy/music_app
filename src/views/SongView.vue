@@ -120,17 +120,19 @@ export default {
       working: false,
     };
   },
-  async created() {
-    const snapshot = await songsCollection.doc(this.$route.params.id).get();
-    if (!snapshot.exists) {
-      this.$router.push({ name: "home" });
-      return;
-    }
+  async beforeRouteEnter(to, from, next) {
+    const snapshot = await songsCollection.doc(to.params.id).get();
 
-    const { s } = this.$route.query;
-    this.sort = s === "1" || s === "2" ? s : "1";
-    this.song = snapshot.data();
-    this.getComments();
+    next((vm) => {
+      if (!snapshot.exists) {
+        vm.$router.push({ name: "home" });
+        return;
+      }
+      const { s } = vm.$route.query;
+      vm.sort = s === "1" || s === "2" ? s : "1";
+      vm.song = snapshot.data();
+      vm.getComments();
+    });
   },
   computed: {
     ...mapState(useUserStore, ["isLoggedIn"]),
