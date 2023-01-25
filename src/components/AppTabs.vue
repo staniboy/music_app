@@ -1,14 +1,14 @@
 <template>
   <ul class="flex flex-wrap mb-4">
-    <li v-for="tab in tabs" :key="tab.id" class="flex-auto text-center">
+    <li v-for="tab in tabs" :key="tab.title" class="flex-auto text-center">
       <a
         class="block rounded py-3 px-4 transition"
         :class="{
-          'text-white bg-blue-600 hover:text-white': selectedTabId === tab.id,
-          'hover:text-blue-600': selectedTabId !== tab.id,
+          'text-white bg-blue-600 hover:text-white': active === tab,
+          'hover:text-blue-600': active !== tab,
         }"
         href="#"
-        @click="selectTab(tab.id)"
+        @click="activate(tab)"
         >{{ tab.title }}</a
       >
     </li>
@@ -23,28 +23,30 @@ export default {
   name: "AppTabs",
   data() {
     return {
-      selectedTabId: "",
+      active: null,
+      tabs: [],
     };
   },
-  computed: {
-    tabs() {
-      return this.$slots.default().map((tab) => {
-        return { title: tab.props.title, id: tab.props.id };
-      });
-    },
-  },
   methods: {
-    selectTab(id) {
-      this.selectedTabId = id;
+    activate(tab) {
+      this.active = tab;
     },
   },
   provide() {
     return {
-      selectedTabId: computed(() => this.selectedTabId),
+      register: (tab) => {
+        this.tabs.push(tab);
+        if (!this.active) this.activate(tab);
+        return {
+          active: computed(() => this.active === tab),
+          unregister: () => {
+            const index = this.tabs.indexOf(tab);
+            this.tabs.splice(index, 1);
+            if (this.active === tab) this.activate(this.tabs[0]);
+          },
+        };
+      },
     };
-  },
-  mounted() {
-    this.selectedTabId = this.tabs[0].id;
   },
 };
 </script>

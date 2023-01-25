@@ -1,28 +1,26 @@
 <template>
-  <div v-if="id === selectedTabId">
+  <div v-if="active">
     <slot></slot>
   </div>
 </template>
 
 <script>
-//import { v4 as uuidv4 } from "uuid";
+import { reactive, toRef } from "vue";
 
 export default {
   props: {
-    id: {
-      type: String,
-      required: true,
-    },
     title: {
       type: String,
       required: true,
     },
   },
+  inject: ["register"],
   data() {
-    return {
-      isActive: true,
-    };
+    const tab = reactive({ title: toRef(this, "title") });
+    return this.register(tab);
   },
-  inject: ["selectedTabId"],
+  unmounted() {
+    this.unregister();
+  },
 };
 </script>
