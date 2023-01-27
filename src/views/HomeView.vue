@@ -38,11 +38,7 @@
         </div>
         <!-- Playlist -->
         <ol id="playlist">
-          <song-item-display
-            v-for="song in songs"
-            :key="song.id"
-            :song="song"
-          />
+          <song-item v-for="song in songs" :key="song.id" :song="song" />
         </ol>
         <!-- .. end Playlist -->
       </div>
@@ -50,11 +46,11 @@
   </main>
 </template>
 <script>
-import SongItemDisplay from "@/components/SongItemDisplay.vue";
+import SongItem from "@/components/SongItem.vue";
 import { songsCollection } from "@/includes/firebase";
 export default {
   name: "HomeView",
-  components: { SongItemDisplay },
+  components: { SongItem },
   data() {
     return {
       songs: [],

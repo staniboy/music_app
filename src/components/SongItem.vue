@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  name: "SongItemDisplay",
+  name: "SongItem",
   props: {
     song: {
       type: Object,
