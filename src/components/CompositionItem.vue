@@ -1,17 +1,15 @@
 <template>
-  <div class="border border-gray-200 p-3 mb-4 rounded">
-    <div v-show="!showForm" class="flex justify-between">
-      <h4 class="inline-block text-2xl font-bold">{{ song.modified_name }}</h4>
-      <div class="flex gap-1">
-        <!-- Open Form -->
-        <app-button color="green" @click="showForm = !showForm" class="h-8 w-8">
-          <i class="fa fa-pencil-alt"></i>
-        </app-button>
-        <!-- Delete Button -->
-        <app-button color="red" @click.prevent="deleteSong" class="h-8 w-8">
-          <i class="fa fa-times"></i>
-        </app-button>
+  <div class="border border-gray-200 p-3 mb-4 rounded flex flex-col gap-3">
+    <div class="flex justify-between align-middle">
+      <div class="text-lg font-semibold self-center">
+        {{ song.modified_name }}
       </div>
+      <!-- Open Form -->
+      <i
+        @click="toggleForm"
+        class="text-black self-center cursor-pointer fa"
+        :class="[showForm ? 'fa-times' : 'fa-pencil-alt']"
+      ></i>
     </div>
     <div v-show="showForm">
       <alert-message
@@ -24,8 +22,9 @@
         :initial-values="song"
         @submit="edit"
       >
+        <!-- Title -->
         <div class="mb-3">
-          <label class="inline-block mb-2">
+          <label class="inline-block mb-2 text-sm font-semibold">
             {{ $t("composition.title") }}
           </label>
           <vee-field
@@ -37,8 +36,9 @@
           />
           <vee-error class="text-red-600" name="modified_name" />
         </div>
+        <!-- Genre -->
         <div class="mb-3">
-          <label class="inline-block mb-2">
+          <label class="inline-block mb-2 text-sm font-semibold">
             {{ $t("composition.genre") }}
           </label>
           <vee-field
@@ -50,18 +50,18 @@
           />
           <vee-error class="text-red-600" name="genre" />
         </div>
-        <div class="flex gap-1">
+        <div class="flex gap-2">
           <!-- Edit Button -->
           <app-button :disabled="working" :type="'submit'" color="green">
             {{ $t("composition.submit") }}
           </app-button>
-          <!-- Back Button -->
-          <app-button
-            color="gray"
-            :disabled="working"
-            @click.prevent="closeForm"
-            >{{ $t("composition.back") }}
-          </app-button>
+          <!-- Delete Button -->
+          <div
+            @click.prevent="deleteSong"
+            class="text-gray-500 font-semibold ml-auto cursor-pointer self-center px-2"
+          >
+            {{ $t("composition.delete") }}
+          </div>
         </div>
       </vee-form>
     </div>
@@ -141,9 +141,9 @@ export default {
       await songsCollection.doc(this.song.id).delete();
       this.removeSong(this.index);
     },
-    closeForm() {
-      this.showForm = false;
-      alert.show = false;
+    toggleForm() {
+      this.showForm = !this.showForm;
+      this.alert.show = false;
     },
   },
 };
