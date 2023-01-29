@@ -1,19 +1,17 @@
 <template>
   <div class="border border-gray-200 p-3 mb-4 rounded">
-    <div v-show="!showForm">
+    <div v-show="!showForm" class="flex justify-between">
       <h4 class="inline-block text-2xl font-bold">{{ song.modified_name }}</h4>
-      <button
-        @click.prevent="deleteSong"
-        class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
-      >
-        <i class="fa fa-times"></i>
-      </button>
-      <button
-        @click="showForm = !showForm"
-        class="ml-1 py-1 px-2 text-sm rounded text-white bg-blue-600 float-right"
-      >
-        <i class="fa fa-pencil-alt"></i>
-      </button>
+      <div class="flex gap-1">
+        <!-- Open Form -->
+        <app-button color="green" @click="showForm = !showForm" class="h-8 w-8">
+          <i class="fa fa-pencil-alt"></i>
+        </app-button>
+        <!-- Delete Button -->
+        <app-button color="red" @click.prevent="deleteSong" class="h-8 w-8">
+          <i class="fa fa-times"></i>
+        </app-button>
+      </div>
     </div>
     <div v-show="showForm">
       <alert-message
@@ -52,26 +50,19 @@
           />
           <vee-error class="text-red-600" name="genre" />
         </div>
-        <button
-          :disabled="working"
-          type="submit"
-          class="py-1.5 px-3 mr-1 rounded text-white bg-green-600"
-        >
-          {{ $t("composition.submit") }}
-        </button>
-        <button
-          :disabled="working"
-          @click.prevent="
-            () => {
-              showForm = false;
-              alert.show = false;
-            }
-          "
-          type="button"
-          class="py-1.5 px-3 rounded text-white bg-gray-600"
-        >
-          {{ $t("composition.back") }}
-        </button>
+        <div class="flex gap-1">
+          <!-- Edit Button -->
+          <app-button :disabled="working" :type="'submit'" color="green">
+            {{ $t("composition.submit") }}
+          </app-button>
+          <!-- Back Button -->
+          <app-button
+            color="gray"
+            :disabled="working"
+            @click.prevent="closeForm"
+            >{{ $t("composition.back") }}
+          </app-button>
+        </div>
       </vee-form>
     </div>
   </div>
@@ -149,6 +140,10 @@ export default {
       await songRef.delete();
       await songsCollection.doc(this.song.id).delete();
       this.removeSong(this.index);
+    },
+    closeForm() {
+      this.showForm = false;
+      alert.show = false;
     },
   },
 };

@@ -105,13 +105,9 @@
       </i18n-t>
       <vee-error class="text-red-600 block" name="tos" />
     </div>
-    <button
-      type="submit"
-      :disabled="working"
-      class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
-    >
+    <app-button color="purple" type="submit" :disabled="working" class="w-full">
       {{ $t("register-form.register") }}
-    </button>
+    </app-button>
   </vee-form>
 </template>
 
