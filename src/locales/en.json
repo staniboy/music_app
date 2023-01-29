@@ -11,7 +11,11 @@
     "songs": "Songs"
   },
   "song": {
-    "comment_count": "No comments | 1 comment | {count} comments"
+    "comment_count": "No comments | 1 comment | {count} comments",
+    "comment-box": "Your comment here...",
+    "latest": "Latest",
+    "oldest": "Oldest",
+    "submit": "Submit"
   },
   "about": {
     "about": "This is about page"
