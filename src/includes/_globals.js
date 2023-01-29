@@ -16,7 +16,6 @@ export default {
         )
       );
       app.component(`${componentName}`, module.default);
-      console.log(`registered: ${componentName}`);
     });
   },
 };
