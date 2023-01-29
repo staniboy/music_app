@@ -48,6 +48,6 @@
     "title": "Song Title",
     "genre": "Genre",
     "submit": "Save",
-    "back": "Go Back"
+    "delete": "Delete"
   }
 }
