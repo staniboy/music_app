@@ -2,7 +2,7 @@
   <button
     :type="props.type"
     :disabled="props.disabled"
-    class="text-white rounded transition py-1 px-2"
+    class="text-white rounded transition py-1.5 px-5"
     :class="colorClasses"
   >
     <slot></slot>
