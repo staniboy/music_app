@@ -11,6 +11,7 @@
         <button
           @click.prevent="newSong(song)"
           type="button"
+          id="play-btn"
           class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
         >
           <i class="fas fa-play"></i>
