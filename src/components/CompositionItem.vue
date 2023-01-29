@@ -52,7 +52,11 @@
         </div>
         <div class="flex gap-2">
           <!-- Edit Button -->
-          <app-button :disabled="working" :type="'submit'" color="green">
+          <app-button
+            :disabled="working"
+            type="submit"
+            class="bg-green-400 hover:bg-green-500"
+          >
             {{ $t("composition.submit") }}
           </app-button>
           <!-- Delete Button -->
@@ -148,3 +152,4 @@ export default {
   },
 };
 </script>
+<style></style>

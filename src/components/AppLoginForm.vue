@@ -30,10 +30,9 @@
       <vee-error class="text-red-600" name="password" />
     </div>
     <app-button
-      color="purple"
       :disabled="working"
       :type="'submit'"
-      class="w-full"
+      class="w-full bg-purple-400 hover:bg-purple-500"
       >{{ $t("login-form.login") }}</app-button
     >
   </vee-form>
