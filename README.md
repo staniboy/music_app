@@ -1,6 +1,7 @@
 # Music App
 
-🎶 Music App for sharing and playing your and other's music. Writen with Vue 3 options API.\\
+🎶 Music App for sharing and playing your and other's music. Writen with Vue 3 options API.\
+\
 🌐 [Live Demo on Vercel](https://music-app-five-liart.vercel.app)
 
 ### Front:
