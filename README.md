@@ -1,6 +1,17 @@
 # Music App
 
-🎶 Music App for sharing and playing you and other's music
+🎶 Music App for sharing and playing your and other's music. Writen with Vue 3 options API.\\
+🌐 [Live Demo on Vercel](https://music-app-five-liart.vercel.app)
+
+### Front:
+- Vue 3
+- Howler (Audio Playback)
+- Tailwind CSS (Styling)
+- Vue-i18n (Multi-lang support)
+- Vee-Validate (Form validation)
+
+### Back:
+- Firebase (DB and Auth)
 
 ## Project Setup
 
